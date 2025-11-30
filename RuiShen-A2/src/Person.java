@@ -1,5 +1,5 @@
 
-public class Person {
+public abstract class Person {
     // 3个实例变量
     private String name;    // 姓名（通用）
     private int age;        // 年龄（通用）

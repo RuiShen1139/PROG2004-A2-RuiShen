@@ -1,4 +1,4 @@
-public class Ride {
+public class Ride implements RideInterface{
     // 3个实例变量
     private String rideName;      // 设施名称（如 "Roller Coaster"、"Ferris Wheel"）
     private int maxCapacity;      // 最大容量（单周期最多可载人数，如 20）
@@ -51,5 +51,53 @@ public class Ride {
         if (rideOperator != null) {
             rideOperator.setManagedRide(this.rideName);
         }
+    }
+
+    @Override
+    public void addVisitorToQueue(Visitor visitor) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'addVisitorToQueue'");
+    }
+
+    @Override
+    public void removeVisitorFromQueue(Visitor visitor) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'removeVisitorFromQueue'");
+    }
+
+    @Override
+    public void printQueue() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'printQueue'");
+    }
+
+    @Override
+    public void addVisitorToHistory(Visitor visitor) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'addVisitorToHistory'");
+    }
+
+    @Override
+    public boolean checkVisitorFromHistory(Visitor visitor) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'checkVisitorFromHistory'");
+    }
+
+    @Override
+    public int numberOfVisitors() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'numberOfVisitors'");
+    }
+
+    @Override
+    public void printRideHistory() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'printRideHistory'");
+    }
+
+    @Override
+    public void runOneCycle() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'runOneCycle'");
     }
 }
