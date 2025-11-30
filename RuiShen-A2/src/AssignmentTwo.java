@@ -1,24 +1,54 @@
 public class AssignmentTwo {
-    // 主方法：程序运行入口
     public static void main(String[] args) {
-        System.out.println("=== PROG2004 A2 主题公园管理系统（RuiShen）===");
+        System.out.println("=== PROG2004 A2 主题公园管理系统 ===");
+        // 调用 Part3 演示方法
+        AssignmentTwo test = new AssignmentTwo();
+        test.partThree();
     }
 
-    // Part3 等待队列管理：演示方法（占位，后续实现）
-    public void partThree() {}
+    // Part3 演示
+    public void partThree() {
+        System.out.println("\n=== Part3: 等待队列管理测试 ===");
+        // 1. 创建操作员
+        Employee operator = new Employee(
+            "Zhang San",    // 姓名
+            30,             // 年龄
+            "ID123456",     // 身份证号
+            "EMP001",       // 员工ID
+            "Roller Coaster"// 负责设施
+        );
 
-    // Part4A 骑行历史管理：演示方法（占位，后续实现）
+        // 2. 创建游乐设施
+        Ride rollerCoaster = new Ride("Roller Coaster", 20, operator);
+
+        // 3. 添加 5 个游客到队列
+        Visitor v1 = new Visitor("Li Si", 25, "ID654321", "VIS001", "2025-12-01");
+        Visitor v2 = new Visitor("Wang Wu", 18, "ID112233", "VIS002", "2025-12-01");
+        Visitor v3 = new Visitor("Zhao Liu", 35, "ID332211", "VIS003", "2025-12-01");
+        Visitor v4 = new Visitor("Chen Qi", 22, "ID445566", "VIS004", "2025-12-01");
+        Visitor v5 = new Visitor("Han Ba", 28, "ID665544", "VIS005", "2025-12-01");
+
+        rollerCoaster.addVisitorToQueue(v1);
+        rollerCoaster.addVisitorToQueue(v2);
+        rollerCoaster.addVisitorToQueue(v3);
+        rollerCoaster.addVisitorToQueue(v4);
+        rollerCoaster.addVisitorToQueue(v5);
+
+        // 4. 打印队列
+        rollerCoaster.printQueue();
+
+        // 5. 移除 1 个游客
+        System.out.println("\n=== 执行移除操作 ===");
+        rollerCoaster.removeVisitorFromQueue(null);
+
+        // 6. 再次打印队列（验证移除结果）
+        rollerCoaster.printQueue();
+    }
+
+    // 其余 part 方法暂时空实现
     public void partFourA() {}
-
-    // Part4B 骑行历史排序：演示方法（占位，后续实现）
     public void partFourB() {}
-
-    // Part5 骑行周期运行：演示方法（占位，后续实现）
     public void partFive() {}
-
-    // Part6 文件写入（导出历史）：演示方法（占位，后续实现）
     public void partSix() {}
-
-    // Part7 文件读取（导入历史）：演示方法（占位，后续实现）
     public void partSeven() {}
 }

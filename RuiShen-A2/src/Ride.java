@@ -1,8 +1,13 @@
+import java.util.Queue;
+import java.util.LinkedList;
+
 public class Ride implements RideInterface{
     // 3个实例变量
     private String rideName;      // 设施名称（如 "Roller Coaster"、"Ferris Wheel"）
     private int maxCapacity;      // 最大容量（单周期最多可载人数，如 20）
     private Employee rideOperator;// 操作员（Employee 类型，控制设施是否可运行）
+
+    private Queue<Visitor> waitingLine = new LinkedList<>();
 
     // 1. 无参构造器（默认构造器）
     public Ride() {}
@@ -13,6 +18,8 @@ public class Ride implements RideInterface{
         this.maxCapacity = maxCapacity;
         this.rideOperator = rideOperator;
     }
+
+    public Queue<Visitor> getWaitingLine(){ return waitingLine; }
 
     // 3. Getter 方法：获取设施属性
     public String getRideName() {
@@ -52,23 +59,41 @@ public class Ride implements RideInterface{
             rideOperator.setManagedRide(this.rideName);
         }
     }
-
+//添加游客到队列
     @Override
     public void addVisitorToQueue(Visitor visitor) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addVisitorToQueue'");
+        if (visitor != null) {
+            waitingLine.offer(visitor); // Queue 安全添加方法
+            System.out.println("成功添加游客【" + visitor.getName() + "】到【" + rideName + "】等待队列");
+        } else {
+            System.out.println("添加失败：游客信息为空");
+        }
     }
 
+//移除队首游客
     @Override
     public void removeVisitorFromQueue(Visitor visitor) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'removeVisitorFromQueue'");
+        if (waitingLine.isEmpty()) {
+            System.out.println("移除失败：【" + rideName + "】等待队列为空");
+            return;
+        }
+        Visitor removed = waitingLine.poll(); // 移除并返回队首
+        System.out.println("从【" + rideName + "】队列移除游客【" + removed.getName() + "】");
     }
 
+//打印队列中所有游客
     @Override
     public void printQueue() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'printQueue'");
+        if (waitingLine.isEmpty()) {
+            System.out.println("【" + rideName + "】等待队列为空");
+            return;
+        }
+        System.out.println("\n【" + rideName + "】等待队列（共" + waitingLine.size() + "人）：");
+        int index = 1;
+        for (Visitor v : waitingLine) {
+            System.out.println(index + ". 姓名：" + v.getName() + " | 门票ID：" + v.getVisitorTicketId() + " | 年龄：" + v.getAge());
+            index++;
+        }
     }
 
     @Override
