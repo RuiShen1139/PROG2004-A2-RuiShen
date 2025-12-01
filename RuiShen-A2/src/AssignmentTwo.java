@@ -3,7 +3,7 @@ public class AssignmentTwo {
         System.out.println("=== PROG2004 A2 主题公园管理系统 ===");
         // 调用 Part3 演示方法
         AssignmentTwo test = new AssignmentTwo();
-        test.partSix();
+        test.partSeven();
     }
 
     // Part3 演示
@@ -189,6 +189,29 @@ public class AssignmentTwo {
         System.out.println("请打开以下路径查看 CSV 文件：" + filePath);
         System.out.println("文件内容格式：姓名,年龄,身份证号,门票ID,访问日期");
     }
-    // 其余 part 方法暂时空实现
-    public void partSeven() {}
+    
+    // Part7 演示：从 CSV 文件导入骑行历史
+    public void partSeven() {
+        System.out.println("\n=== Part7: 从 CSV 导入骑行历史测试 ===");
+        // 1. 创建新的游乐设施（历史为空）
+        Employee operator = new Employee("Qian Er", 24, "440101200101012345", "EMP005", "Carousel");
+        Ride carousel = new Ride("Carousel", 12, operator, 4);
+
+        // 2. 验证导入前历史为空
+        System.out.println("\n=== 步骤1：导入前的骑行历史 ===");
+        carousel.printRideHistory(); 
+
+        // 3. 导入 Part6 生成的 CSV 文件
+        System.out.println("\n=== 步骤2：从 CSV 导入历史 ===");
+        String filePath = "D:\\\\SchoolWork\\\\OOP\\\\A2-code"; 
+        carousel.importRideHistory(filePath);
+
+        // 4. 验证导入结果（统计数量+打印详情）
+        System.out.println("\n=== 步骤3：验证导入结果 ===");
+        System.out.println("=== 统计导入的游客数量 ===");
+        carousel.numberOfVisitors(); 
+        System.out.println("\n=== 打印导入的历史详情 ===");
+        carousel.printRideHistory(); 
+    }
+
 }

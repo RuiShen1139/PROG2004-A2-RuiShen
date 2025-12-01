@@ -2,6 +2,13 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Iterator;
 import java.util.Collections;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class Ride implements RideInterface {
     // 原有变量（保留）：设施名称、最大容量、操作员、等待队列
@@ -23,7 +30,7 @@ public class Ride implements RideInterface {
     public String getRideName() {
         return rideName;
     }
-    
+
     // rideHistory 的 getter
     public LinkedList<Visitor> getRideHistory() {
         return rideHistory;
@@ -65,13 +72,123 @@ public class Ride implements RideInterface {
         if (maxRider >= 1) { // 校验：单周期至少1人
             this.maxRider = maxRider;
         } else {
-            System.out.println("❌ 单周期载客量必须至少为1人");
+            System.out.println("单周期载客量必须至少为1人");
         }
     }
 
     public int getNumOfCycles() {
         return numOfCycles;
     }
+
+    // ==================== 实现 exportRideHistory====================
+    public void exportRideHistory(String filePath) {
+        // 1. 校验：历史记录是否为空
+        if (rideHistory.isEmpty()) {
+            System.out.println("导出失败：【" + rideName + "】骑行历史为空");
+            return;
+        }
+        // 2. 校验：文件路径是否为空
+        if (filePath == null || filePath.trim().isEmpty()) {
+            System.out.println("导出失败：文件路径为空");
+            return;
+        }
+        // 3. 用 try-with-resources 自动关闭流（避免资源泄漏）
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+            // 3.1 写入 CSV 表头（便于后续读取时识别字段）
+            writer.write("姓名,年龄,身份证号,门票ID,访问日期");
+            writer.newLine(); // 换行
+
+            // 3.2 遍历历史记录，写入每一行游客数据
+            for (Visitor visitor : rideHistory) {
+                // 按 CSV 格式拼接数据（字段顺序与表头一致）
+                String line = String.join(",",
+                    visitor.getName(),                  // 姓名
+                    String.valueOf(visitor.getAge()),   // 年龄（转字符串）
+                    visitor.getIdCard(),                // 身份证号
+                    visitor.getVisitorTicketId(),       // 门票ID
+                    visitor.getVisitDate()              // 访问日期
+                );
+                writer.write(line);
+                writer.newLine(); // 换行
+            }
+
+            System.out.println("导出成功！【" + rideName + "】骑行历史已保存到：" + filePath);
+        } catch (IOException e) {
+            // 异常处理：捕获文件写入错误（如路径不存在、权限不足）
+            System.out.println("导出失败：" + e.getMessage());
+            e.printStackTrace(); // 打印异常堆栈
+        }
+    }
+
+    // ==================== 实现 importRideHistory（从 CSV 导入历史，Part7 核心）====================
+    public void importRideHistory(String filePath) {
+        // 1. 校验：文件是否存在
+        File file = new File(filePath);
+        if (!file.exists()) {
+            System.out.println("导入失败：文件不存在 → " + filePath);
+            return;
+        }
+        // 2. 校验：是否为文件
+        if (!file.isFile()) {
+            System.out.println("导入失败：路径不是文件 → " + filePath);
+            return;
+        }
+        // 3. 用 try-with-resources 自动关闭流
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String line;
+            int lineNum = 0;
+            int importCount = 0; // 成功导入的游客数
+
+            // 3.1 读取每一行数据
+            while ((line = reader.readLine()) != null) {
+                lineNum++;
+                // 跳过表头（第一行）
+                if (lineNum == 1) {
+                    System.out.println("跳过 CSV 表头：" + line);
+                    continue;
+                }
+                // 跳过空行
+                if (line.trim().isEmpty()) {
+                    System.out.println("跳过空行（第 " + lineNum + " 行）");
+                    continue;
+                }
+                // 3.2 按逗号分割数据（CSV 格式）
+                String[] fields = line.split(",");
+                // 校验：每行必须有 5 个字段（与表头对应）
+                if (fields.length != 5) {
+                    System.out.println("跳过无效行（第 " + lineNum + " 行）：字段数不符（需5个，实际" + fields.length + "个）→ " + line);
+                    continue;
+                }
+                // 3.3 解析字段（处理可能的格式错误）
+                String name = fields[0].trim();
+                int age;
+                try {
+                    age = Integer.parseInt(fields[1].trim()); // 年龄转 int
+                } catch (NumberFormatException e) {
+                    System.out.println("跳过无效行（第 " + lineNum + " 行）：年龄不是数字 → " + fields[1]);
+                    continue;
+                }
+                String idCard = fields[2].trim();
+                String ticketId = fields[3].trim();
+                String visitDate = fields[4].trim();
+
+                // 3.4 创建游客对象并添加到历史
+                Visitor visitor = new Visitor(name, age, idCard, ticketId, visitDate);
+                rideHistory.add(visitor);
+                importCount++;
+                System.out.println("成功导入游客（第 " + lineNum + " 行）：" + name + "（门票ID：" + ticketId + "）");
+            }
+
+            // 3.5 输出导入结果
+            System.out.println("\n导入完成！共读取 " + (lineNum - 1) + " 行数据（含表头），成功导入 " + importCount + " 名游客到【" + rideName + "】骑行历史");
+        } catch (IOException e) {
+            // 处理 IO 异常（如文件读取权限不足）
+            System.out.println("导入失败：" + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+
 
     // ==================== 1. 实现 addVisitorToHistory（添加游客到历史）====================
     @Override
