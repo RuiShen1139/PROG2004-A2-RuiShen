@@ -3,7 +3,7 @@ public class AssignmentTwo {
         System.out.println("=== PROG2004 A2 主题公园管理系统 ===");
         // 调用 Part3 演示方法
         AssignmentTwo test = new AssignmentTwo();
-        test.partFive();
+        test.partSix();
     }
 
     // Part3 演示
@@ -159,7 +159,36 @@ public class AssignmentTwo {
         System.out.println("【" + waterSlide.getRideName() + "】已运行 " + waterSlide.getNumOfCycles() + " 个周期");
     }
 
+    // Part6 演示：导出骑行历史到 CSV 文件
+    public void partSix() {
+        System.out.println("\n=== Part6: 导出骑行历史到 CSV 测试 ===");
+        // 1. 创建操作员和游乐设施
+        Employee operator = new Employee("Qian Er", 24, "440101200101012345", "EMP005", "Carousel");
+        Ride carousel = new Ride("Carousel", 12, operator, 4); // maxRider=4
+
+        // 2. 添加 5 个游客到历史
+        System.out.println("\n=== 步骤1：添加 5 个游客到历史 ===");
+        Visitor v1 = new Visitor("Sun", 22, "ID123456", "VIS201", "2025-12-01");
+        Visitor v2 = new Visitor("Zhou", 26, "ID654321", "VIS202", "2025-12-01");
+        Visitor v3 = new Visitor("Wu", 21, "ID112233", "VIS203", "2025-12-01");
+        Visitor v4 = new Visitor("Zheng", 23, "ID332211", "VIS204", "2025-12-01");
+        Visitor v5 = new Visitor("Wang", 25, "ID445566", "VIS205", "2025-12-01");
+        carousel.addVisitorToHistory(v1);
+        carousel.addVisitorToHistory(v2);
+        carousel.addVisitorToHistory(v3);
+        carousel.addVisitorToHistory(v4);
+        carousel.addVisitorToHistory(v5);
+
+        // 3. 导出到 CSV 文件
+        System.out.println("\n=== 步骤2：导出历史到 CSV 文件 ===");
+        String filePath = "D:\\SchoolWork\\OOP\\A2-code";
+        carousel.exportRideHistory(filePath);
+
+        // 4. 提示用户验证文件
+        System.out.println("\n=== 步骤3：验证文件 ===");
+        System.out.println("请打开以下路径查看 CSV 文件：" + filePath);
+        System.out.println("文件内容格式：姓名,年龄,身份证号,门票ID,访问日期");
+    }
     // 其余 part 方法暂时空实现
-    public void partSix() {}
     public void partSeven() {}
 }
