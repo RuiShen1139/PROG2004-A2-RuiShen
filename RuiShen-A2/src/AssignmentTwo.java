@@ -3,7 +3,7 @@ public class AssignmentTwo {
         System.out.println("=== PROG2004 A2 主题公园管理系统 ===");
         // 调用 Part3 演示方法
         AssignmentTwo test = new AssignmentTwo();
-        test.partFourB();
+        test.partFive();
     }
 
     // Part3 演示
@@ -120,8 +120,46 @@ public class AssignmentTwo {
         ferrisWheel.printRideHistory();
     }
 
+    // Part5 演示：运行骑行周期（队列→历史转移）
+    public void partFive() {
+        System.out.println("\n=== Part5: 骑行周期运行测试 ===");
+        // 1. 创建操作员（负责 Water Slide）
+        Employee operator = new Employee("Zhao Da", 32, "440101199301017890", "EMP004", "Water Slide");
+
+        // 2. 创建游乐设施（单周期最大载客 3 人，Part5 核心配置）
+        Ride waterSlide = new Ride("Water Slide", 25, operator, 3);
+
+        // 3. 添加 10 个游客到等待队列（作业要求：至少10个）
+        System.out.println("\n=== 步骤1：添加 10 个游客到等待队列 ===");
+        for (int i = 1; i <= 10; i++) {
+            Visitor visitor = new Visitor(
+                "Visitor" + i,          // 姓名
+                18 + i,                 // 年龄（19-28岁）
+                "ID" + (1000 + i),       // 身份证号
+                "VIS" + (100 + i),       // 门票ID
+                "2025-12-01"             // 访问日期
+            );
+            waterSlide.addVisitorToQueue(visitor);
+        }
+
+        // 4. 打印运行前的队列
+        System.out.println("\n=== 步骤2：运行前的等待队列 ===");
+        waterSlide.printQueue();
+
+        // 5. 运行一个周期
+        System.out.println("\n=== 步骤3：运行一个周期（单周期最大载客 3 人）===");
+        waterSlide.runOneCycle();
+
+        // 6. 打印运行后的队列和历史
+        System.out.println("\n=== 步骤4：运行后的等待队列（剩余 7 人）===");
+        waterSlide.printQueue();
+        System.out.println("\n=== 步骤5：运行后的骑行历史（新增 3 人）===");
+        waterSlide.printRideHistory();
+        System.out.println("\n=== 步骤6：当前总运行周期数 ===");
+        System.out.println("【" + waterSlide.getRideName() + "】已运行 " + waterSlide.getNumOfCycles() + " 个周期");
+    }
+
     // 其余 part 方法暂时空实现
-    public void partFive() {}
     public void partSix() {}
     public void partSeven() {}
 }
